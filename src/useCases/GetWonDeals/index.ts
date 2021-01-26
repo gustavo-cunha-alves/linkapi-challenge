@@ -6,4 +6,4 @@ const pipedriveDeal = new PipedriveDealProvider();
 const getWonDealsUseCase = new GetWonDealsUseCase(pipedriveDeal);
 const getWonDealsController = new GetWonDealsController(getWonDealsUseCase);
 
-export { getWonDealsController }
+export { getWonDealsController, getWonDealsUseCase }

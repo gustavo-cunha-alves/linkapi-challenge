@@ -15,7 +15,7 @@ export class PipedriveDealProvider implements IDealProvider {
         status: deal.status,
         title: deal.title,
         value: deal.value,
-        won_time: deal.won_time,
+        won_time: deal.won_time.split(' ')[0],
         org_name: deal.org_name
       }
       return ideal
