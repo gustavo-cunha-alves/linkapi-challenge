@@ -1,6 +1,6 @@
 import { Order } from "../../entities/Order";
+import { IDeal } from "../../providers/IDealProvider";
 import { IOrderProvider } from "../../providers/IOrderProvider";
-import { InsertOrderDTO } from "./InsertOrderDTO";
 
 export class InsertOrderUseCase {
 
@@ -8,7 +8,7 @@ export class InsertOrderUseCase {
     private orderProvider: IOrderProvider
   ){}
 
-  async execute(data: InsertOrderDTO[]) {
+  async execute(data: IDeal[]) {
     data.map(async data => {
       const order = new Order(data);
       return await this.orderProvider.insertOrder(order);

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { InsertOrderDTO } from "./InsertOrderDTO";
+import { IDeal } from "../../providers/IDealProvider";
 import { InsertOrderUseCase } from "./InsertOrderUseCase";
 
 export class InsertOrderController {
@@ -10,7 +10,7 @@ export class InsertOrderController {
 
   handle = async (req: Request, res: Response) => {
     try {
-      const deals: Array<InsertOrderDTO> = req.body
+      const deals: Array<IDeal> = req.body
 
       if (!deals)
         return res.status(400).json({ message: 'bad request' })
