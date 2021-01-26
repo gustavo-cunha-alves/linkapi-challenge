@@ -9,13 +9,12 @@ export class CreateOrdersDayUseCase {
   ) { }
 
   async execute(data: CreateOrdersDayDTO) {
-    const ordersDay = new OrdersDay({date: new Date(data.date), value: data.value});
+    const ordersDay = new OrdersDay({ date: data.date, value: data.value });
     const ordersDayAlreadyExists = await this.ordersDayRepository.findByDate(ordersDay.date);
 
-    if(!ordersDayAlreadyExists)
-      return await this.ordersDayRepository.save(ordersDay);
+    if (!ordersDayAlreadyExists)
+      await this.ordersDayRepository.save(ordersDay);
 
-    ordersDay.value += ordersDayAlreadyExists.value
-    return await this.ordersDayRepository.update(ordersDay);
+    await this.ordersDayRepository.update(ordersDay);
   }
 }

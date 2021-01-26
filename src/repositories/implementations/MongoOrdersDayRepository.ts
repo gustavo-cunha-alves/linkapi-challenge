@@ -7,7 +7,7 @@ export class MongoOrdersDayRepository implements IOrdersDayRepository {
   async save(ordersDay: OrdersDay): Promise<OrdersDay> {
     try {
       const { date, value }: any = await OrdersDayModel.create(ordersDay);
-      const createdOrdersDay = new OrdersDay({ date: new Date(date), value });
+      const createdOrdersDay = new OrdersDay({ date: date, value });
       return createdOrdersDay
     } catch (error) {
       console.log(error);
@@ -27,7 +27,7 @@ export class MongoOrdersDayRepository implements IOrdersDayRepository {
       let ordersDayDatabase = await OrdersDayModel.find();
 
       const od: Array<OrdersDay> = ordersDayDatabase.map(ordersDayDatabase => {
-        const ordersDays = { date: new Date(ordersDayDatabase.date), value: ordersDayDatabase.value };
+        const ordersDays = { date: ordersDayDatabase.date, value: ordersDayDatabase.value };
         return ordersDays
       })
 
@@ -37,14 +37,14 @@ export class MongoOrdersDayRepository implements IOrdersDayRepository {
     }
   }
 
-  async findByDate(dateFilter: Date): Promise<OrdersDay> {
+  async findByDate(dateFilter: string): Promise<OrdersDay> {
     try {
       let [result] = await OrdersDayModel.find({ date: dateFilter });
 
       if (!result)
         return result
 
-      const od = new OrdersDay({ date: new Date(result.date), value: result.value })
+      const od = new OrdersDay({ date: result.date, value: result.value })
 
       return od
     } catch (error) {

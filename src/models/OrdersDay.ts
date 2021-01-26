@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const OrdersDaySchema = new mongoose.Schema({
-  date: Date,
+  date: String,
   value: Number
 })
 

@@ -1,4 +1,4 @@
 export interface CreateOrdersDayDTO {
-  date: Date;
+  date: string;
   value: number;
 }
