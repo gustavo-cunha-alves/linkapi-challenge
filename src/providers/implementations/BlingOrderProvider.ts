@@ -5,30 +5,61 @@ const { toXML } = require('jstoxml');
 
 export class BlingOrderProvider implements IOrderProvider {
 
-  private base_url = "https://bling.com.br/Api/v2/";
+  private base_url = `https://bling.com.br/Api/v2/`;
 
   async insertOrder(order: Order): Promise<void> {
 
-    const endpoint = `${this.base_url}pedido/json/?apikey=${process.env.API_KEY_BLING}`;
-    const payload = {
-      pedido: {
-        cliente: {
-          nome: order.client.name
-        },
-        item: {
-          codigo: order.item.id,
-          descricao: order.item.description,
-          qtde: order.item.amount,
-          vlr_unit: order.item.unit_value
-        },
-        data: order.date
+    try {
+      const endpoint = `${this.base_url}pedido/json/?apikey=${process.env.API_KEY_BLING}`
+      const payload = {
+        pedido: {
+          cliente: {
+            nome: order.client.name
+          },
+          item: {
+            codigo: order.item.id,
+            descricao: order.item.description,
+            qtde: order.item.amount,
+            vlr_unit: order.item.unit_value
+          },
+          data: order.dateFormatted
+        }
       }
+      const xml = toXML(payload);
+      const response = await axios.post(endpoint + '&xml=' + xml);
+
+    } catch (error) {
+      console.log(error)
     }
-    const xml = toXML(payload);
-    const response = await axios.post(endpoint + '&xml=' + xml);
 
-    if (response.status !== 200 || response.data.retorno.erros)
-      throw new Error('error inserting order');
+  }
 
+  async getOrder(): Promise<Order[]> {
+    try {
+      const endpoint = `${this.base_url}pedidos/json/?apikey=${process.env.API_KEY_BLING}`
+      const response = await axios.get(endpoint);
+
+      const orders: Array<Order> = response.data.retorno.pedidos.map((pedido) => {
+
+        const order: Order = {
+          client: {
+            name: pedido.pedido.cliente.nome
+          },
+          date: pedido.pedido.data,
+          item: {
+            amount: pedido.pedido.itens[0].item.quantidade,
+            description: pedido.pedido.itens[0].item.descricao,
+            id: pedido.pedido.itens[0].item.codigo,
+            unit_value: parseFloat(pedido.pedido.itens[0].item.valorunidade)
+          }
+        }
+
+        return order
+      })
+
+      return orders
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
