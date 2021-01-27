@@ -26,8 +26,7 @@ export class BlingOrderProvider implements IOrderProvider {
         }
       }
       const xml = toXML(payload);
-      const response = await axios.post(endpoint + '&xml=' + xml);
-
+      await axios.post(endpoint + '&xml=' + xml);
     } catch (error) {
       console.log(error)
     }
@@ -38,6 +37,9 @@ export class BlingOrderProvider implements IOrderProvider {
     try {
       const endpoint = `${this.base_url}pedidos/json/?apikey=${process.env.API_KEY_BLING}`
       const response = await axios.get(endpoint);
+
+      if(response.data.retorno.erros)
+        return []
 
       const orders: Array<Order> = response.data.retorno.pedidos.map((pedido) => {
 

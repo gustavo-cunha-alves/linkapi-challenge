@@ -4,10 +4,13 @@ import axios from 'axios'
 export class PipedriveDealProvider implements IDealProvider {
 
   private base_url = "https://api.pipedrive.com/v1/deals"
-  
+
   async getWonDeals(): Promise<IDeal[]> {
     const endpoint: string = `${this.base_url}?status=won&start=0&api_token=${process.env.API_KEY_PIPEDRIVE}`
     const response = await axios.get(endpoint)
+
+    if (!response.data.data)
+      return []
 
     const deals = response.data.data.map(deal => {
       let ideal: IDeal = {
