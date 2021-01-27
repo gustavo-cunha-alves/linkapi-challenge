@@ -10,12 +10,10 @@ export class GetOrdersDayController {
 
   handle = async (req: Request, res: Response): Promise<Response> => {
     try {
-      
       const ordersDay = await this.getOrdersDayUseCase.execute();
-
       return res.status(200).json({ body: ordersDay })
     } catch (error) {
-      console.log(error)
+      return res.status(500).json({ message: 'internal error' })
     }
   }
 }

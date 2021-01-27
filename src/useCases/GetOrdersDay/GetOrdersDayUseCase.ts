@@ -20,9 +20,9 @@ export class GetOrdersDayUseCase {
     await insertOrderUseCase.execute(wonDeals);
     const orders = await getOrderUseCase.execute();
     const sumOrdersDay = this.sumOrdersDayValue(orders);
-    Promise.resolve(sumOrdersDay.map((sumDay: OrdersDay) => {
-      createOrdersDayUseCase.execute(sumDay);
-    }));
+    for(const sumDay of sumOrdersDay){
+      await createOrdersDayUseCase.execute(sumDay);
+    }
     const ordersDay: Array<OrdersDay> = await this.ordersDayRepository.find();
     
     return ordersDay;

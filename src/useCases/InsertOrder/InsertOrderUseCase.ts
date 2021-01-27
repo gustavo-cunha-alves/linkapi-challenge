@@ -8,10 +8,10 @@ export class InsertOrderUseCase {
     private orderProvider: IOrderProvider
   ){}
 
-  async execute(data: IDeal[]) {
-    data.map(async data => {
-      const order = new Order(data);
-      return await this.orderProvider.insertOrder(order);
-    })
+  async execute(deals: IDeal[]): Promise<void> {
+    for(const deal of deals){
+      const order = new Order(deal);
+      await this.orderProvider.insertOrder(order);
+    }
   }
 }
